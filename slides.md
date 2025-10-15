@@ -6,6 +6,10 @@ drawings:
   persist: false
 ---
 
+---
+layout: title
+---
+
 # Environment Cloning
 
 ---
@@ -25,7 +29,7 @@ drawings:
 
 # db:clone
 
-```zsh [php artisan db:clone]
+```zsh [php artisan db:clone]{1-2|7-9|12|13|14|15|16|17|18}
 Description:
   Clone a remote database via SSH using Spatie Laravel Backup, optionally sanitize PII data, and replace local database
 
@@ -114,20 +118,20 @@ Usage:
 Options:
       --filename[=FILENAME]          
       --only-db                      
-      --db-name[=DB-NAME]             (multiple values allowed)
+      --db-name[=DB-NAME]       (multiple values allowed)
       --only-files                   
       --only-to-disk[=ONLY-TO-DISK]  
       --disable-notifications        
       --timeout[=TIMEOUT]            
       --tries[=TRIES]                
-      --isolated[=ISOLATED]          Do not run the command if another instance of the command is already running [default: false]
+      --isolated[=ISOLATED]     Do not run the command if another instance of the command is already running [default: false]
 ```
 
 ---
 
 # backup:run
 
-```php [config/backup.php] {3-5|6-9}
+```php [config/backup.php] {3-5|6-9|11-31}
 'source' => [
     'files' => [
         'include' => [
@@ -138,15 +142,6 @@ Options:
             storage_path('app/files'),
         ],
     ],
-]
-```
-
----
-
-# backup:run
-
-```php [config/backup.php]{*}{maxHeight:'400px'}
-'source' => [
     'config_clone' => [
         'blacklisted_keys' => [],
         'whitelisted_env' => [
@@ -170,6 +165,7 @@ Options:
     ],
 ]
 ```
+
 ---
 
 # backup:run
@@ -185,6 +181,8 @@ $schedule->command('backup:clean')
 ### Other Considerations
 
 - Storage space
+- Notifications
+- SSH Pass
 - Memory usage
 - Pre deploy backups
 
@@ -196,7 +194,7 @@ anything is missed, this scheduled command will remove it.
 
 # db:sanitize
 
-```zsh [php artisan db:sanitize]
+```zsh [php artisan db:sanitize]{1-2|4-5|8|9|10|11|12}
 Description:
   Sanitize database by anonymizing PII data in specified tables
 
@@ -215,7 +213,7 @@ Options:
 
 # config:clone
 
-```zsh [php artisan config:clone]
+```zsh [php artisan config:clone]{1-2|7-9|12|13|14|15|16|17|18}
 Description:
   Clone configuration files and environment variables from a remote server
 
@@ -240,7 +238,7 @@ Options:
 
 # storage:clear
 
-```zsh [php artisan storage:clear]
+```zsh [php artisan storage:clear]{1-2|8|9}
 Description:
   Clear all git-ignored files from storage directory
 
@@ -253,10 +251,27 @@ Options:
 ```
 
 ---
+
+# Resources
+- [spatie/laravel-backup](https://spatie.be/docs/laravel-backup/)
+- php artisan list
+- [Invo Docs](http://localhost:3000/docs/supports-devops/setup-envs/cloning-environments)
+
+---
 layout: center
 ---
 
 # Demo
+
+<!--
+# Demo steps
+- Show clean local environment
+- Run `sail artisan db:clone blucurrent --include-files --include-config --backup --no-sanitize --dry-run --remote-dir="~/public_html/videobanking"`
+- Show cloned local environment with unsanitized blucurrent data
+- Sanitize the data
+- Reset local using `sail artisan storage:clear` and `sail artisan db:migrate --fresh`
+- Show clean environment
+-->
 
 ---
 layout: center
@@ -270,3 +285,13 @@ layout: center
 
 - Refactoring
 - AI code reviews
+
+<!--
+Benefits of CodeCov
+- Lower Cost ($29/mo vs $150/mo, 1/2 the per seat cost)
+- Better signal/noise ratio
+- **AI insights from sentry traces**: It looks at past errors to determine if code is likely to produce a similar error
+- Handles PR code coverage detection also
+
+14/day free trial in place of CodeRabbit
+-->
